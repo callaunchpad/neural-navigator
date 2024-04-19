@@ -7,7 +7,7 @@ def events(url, page, base):
     event_imgs = []
     event_locs = []
     event_times = []
-    event_descs = [] # TODO (each event has an associated page where desc is held)
+    event_thru = []
     event_bas_url = []
 
     for i in range(1, 1000):
@@ -35,6 +35,22 @@ def events(url, page, base):
                         event_bas_url.append(None)
                 except:
                     event_bas_url.append(None)
+
+                banners = event_card.find("ul", class_="ds-listing-banners")
+                if banners:
+                    banner_list = banners.findAll('li', class_="ds-listing-series")
+                    flag = False
+                    for banner in banner_list:
+                        if flag:
+                            break
+                        spans = banner.findAll("span")
+                        for span in spans:
+                            if "Through" in span.text:
+                                flag = True
+                                event_thru.append(span.text)
+                                break
+                else:
+                    event_thru.append(None)
 
                 cover_img = event_card.find("div", class_="ds-cover-image")
                 img_url = None
@@ -77,7 +93,8 @@ def events(url, page, base):
         'event_imgs': event_imgs,
         'event_locs': event_locs,
         'event_times': event_times,
-        'event_BAS_urls' : event_bas_url
+        'event_BAS_urls' : event_bas_url,
+        'event_thru' : event_thru
     }
 
 print(events('http://sf-events.brokeassstuart.com/events/2024/04/15', "?page=", "http://sf-events.brokeassstuart.com"))
