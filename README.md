@@ -1,9 +1,11 @@
 # neural-navigator
 
-`Data:` collecting location & events data
+### Organization
 
-`Model:` CBF, CMF & GCN notebooks
+`DATA:` collecting location & events data
 
-`Web-app:` Nothing for now - will move contents over when ready
+`MODEL:` CBF, CMF & GCN notebooks
 
-`Guides:` setup + extension ideas
+`WEB-APP:` Nothing for now - will move contents over when ready
+
+`GUIDES:` setup + extension ideas
