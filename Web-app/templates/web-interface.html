@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Neural Navigator</title>
+    <title>neural navigator</title>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:600" rel="stylesheet">
 
@@ -199,9 +199,10 @@
             border-radius: 10px;
             margin-left:5%;
             margin-bottom:5%;
-            height:36vh;
+            height:46vh;
             width:60vh;
             display: inline-block; 
+            
         }
 
         .all_link_div {
@@ -268,8 +269,12 @@
         .content_cell_header {
             font-family: 'Montserrat';
             font-weight: 600;
-            font-size: 22px;
+            font-size: 18px;
             padding-left: 5%;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            text-overflow: ellipsis;
         }
 
         .cell_grid {
@@ -305,6 +310,13 @@
             padding-left: 5%;
         }
 
+        svg {
+            vertical-align: text-top;
+        }
+
+        .invisilbl {
+            font-size: 0px;
+        }
     </style>
 </head>
 <body>
@@ -314,14 +326,15 @@
             <h2 class="header" href="#home">Neural Navigator</h2>
         </li>
         <li>
-            <form>
+            <form id="search_params">
                 <div class="navbar_items">
                     <label class="date_label">day</label>
-                    <input type="date" name="start" />
+                    <input type="date" name="day" id="day_input" />
                 </div>
                 <div class="navbar_items">
                     <label class="date_label">area</label>
-                    <select>
+                    <select name="area" id="area">
+                        <option>Anywhere</option>
                         <option>Berkeley</option>
                         <option>San Francisco</option>
                         <option>Oakland</option>
@@ -329,19 +342,19 @@
                     </select>                </div>
                 <div class="navbar_items">
                     <label class="date_label">search radius</label>
-                    <input type="text" id="myInput" placeholder="mi" class="radius_spc">
+                    <input type="text" id="radius" placeholder="km" class="radius_spc" name="rad">
                 </div>
                 <div class="navbar_items">
                     <label class="date_label">plan itinerary</label>
-                    <input type="text" id="myInput" placeholder="hrs">
+                    <input type="text" id="itinerary_hrs" placeholder="hrs" name="itin_dur">
                     <label class="itinerary_btn">
-                        <input type='checkbox'>
+                        <input type='checkbox' name="tf_itin" id="itinerary_tf">
                         <span></span>
                     </label>                
                 </div>
                 <div class="navbar_items">
                     <label class="date_label">rec system</label>
-                    <select>
+                    <select name="rec_sys" id="rec">
                         <option>LightGCN</option>
                         <option>MF</option>
                         <option>CBF</option>
@@ -361,31 +374,37 @@
 
     <div class="content">
         <br>
-        <h2 class="header">your recommendations for today...</h2>
+        <h2 class="header">recommendations for {{ date_selection }}</h2>
+
+        {% for item in recommendations %}
+        
         <div class="content_item">
-            <h2 class="content_cell_header">play tennis at channing courts</h2>
+            <h2 class="content_cell_header">{{ item.title }}</h2>
             <ul class="cell_grid">
-                <li class="cell_feature_row" style="width:40%;">
+                <li class="cell_feature_row" style="width:100%;">
                     <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z" stroke="#000000" stroke-width="2.5"></path><path d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z" fill="#000000" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    <label class="cell_feature_text">address</label>
+                    <label class="cell_feature_text">{{ item.address }}</label>
                 </li>
-                <li style="display:inline-block;width:40%;">
-                    <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12.4409 9.12717L11.0322 14.7618L15.9626 21.1008" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10.3278 18.2835L8.21484 21.1008" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.21484 13.3532C8.21484 9.40889 11.0323 9.12714 12.4409 9.12717L13.8494 9.12714C14.0842 10.301 15.1172 12.7897 17.3711 13.3531" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13 7C14.1046 7 15 6.10457 15 5C15 3.89543 14.1046 3 13 3C11.8954 3 11 3.89543 11 5C11 6.10457 11.8954 7 13 7Z" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    <label class="cell_feature_text">distance</label>
-                </li>
-                <br><br>  
-                <li style="display:inline-block;width:40%;padding-left: 10%;">
+                <br><br> 
+                <li class="cell_feature_row" style="width:100%;">
                     <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10" stroke="#000000" stroke-width="2.5"></path><path d="M14.8333 21V15C14.8333 13.8954 13.9379 13 12.8333 13H10.8333C9.72874 13 8.83331 13.8954 8.83331 15V21" stroke="#000000" stroke-width="2.5" stroke-miterlimit="16"></path><path d="M21.8183 9.36418L20.1243 3.43517C20.0507 3.17759 19.8153 3 19.5474 3H15.5L15.9753 8.70377C15.9909 8.89043 16.0923 9.05904 16.2532 9.15495C16.6425 9.38698 17.4052 9.81699 18 10C19.0158 10.3125 20.5008 10.1998 21.3465 10.0958C21.6982 10.0526 21.9157 9.7049 21.8183 9.36418Z" stroke="#000000" stroke-width="2.5"></path><path d="M14 10C14.5675 9.82538 15.2879 9.42589 15.6909 9.18807C15.8828 9.07486 15.9884 8.86103 15.9699 8.63904L15.5 3H8.5L8.03008 8.63904C8.01158 8.86103 8.11723 9.07486 8.30906 9.18807C8.71207 9.42589 9.4325 9.82538 10 10C11.493 10.4594 12.507 10.4594 14 10Z" stroke="#000000" stroke-width="2.5"></path><path d="M3.87567 3.43517L2.18166 9.36418C2.08431 9.7049 2.3018 10.0526 2.6535 10.0958C3.49916 10.1998 4.98424 10.3125 6 10C6.59477 9.81699 7.35751 9.38698 7.74678 9.15495C7.90767 9.05904 8.00913 8.89043 8.02469 8.70377L8.5 3H4.45258C4.18469 3 3.94926 3.17759 3.87567 3.43517Z" stroke="#000000" stroke-width="2.5"></path></svg>
-                    <label class="cell_feature_text">category</label> 
+                    <label class="cell_feature_text">{{ item.category }}</label> 
                 </li>
-                <li style="display:inline-block;width:40%;">
+                <br><br> 
+                <li class="cell_feature_row" style="width:100%;">
+                    <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12.4409 9.12717L11.0322 14.7618L15.9626 21.1008" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10.3278 18.2835L8.21484 21.1008" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.21484 13.3532C8.21484 9.40889 11.0323 9.12714 12.4409 9.12717L13.8494 9.12714C14.0842 10.301 15.1172 12.7897 17.3711 13.3531" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13 7C14.1046 7 15 6.10457 15 5C15 3.89543 14.1046 3 13 3C11.8954 3 11 3.89543 11 5C11 6.10457 11.8954 7 13 7Z" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    <label class="cell_feature_text">{{ item.distance }}</label>
+                </li>
+                <br><br> 
+                <li class="cell_feature_row" style="width:100%;">
                     <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M9 2L15 2" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 10L12 14" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 22C16.4183 22 20 18.4183 20 14C20 9.58172 16.4183 6 12 6C7.58172 6 4 9.58172 4 14C4 18.4183 7.58172 22 12 22Z" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    <label class="cell_feature_text">hours</label>
+                    <label class="cell_feature_text">{{ item.hours }}</label>
                 </li>
                 <br><br> 
                 <li style="display:inline-block;width:100%;">
                     <label class="cell_feature_header">Rating</label>
                     <br><br>
+                    <label class="invisilbl" id="idrating">{{ item.id }}</label>
                     <button class="rate_btn">1</button>
                     <button class="rate_btn">2</button>
                     <button class="rate_btn">3</button>
@@ -402,79 +421,123 @@
                     <button class="link_btn" style="text-decoration:none;width:100%;">save</button>
                 </li>
                 <li style="display:inline-block;width:45%;">
-                    <a class="link_btn" href="staff.html" style="text-decoration:none;width:100%;">link</a>
+                    <a class="link_btn" href="{{ item.link }}" style="text-decoration:none;width:100%;">link</a>
                 </li>
             </ul>
-        </div>
-        <div class="content_item">
-            <h2 class="content_cell_header">play tennis at channing courts</h2>
-            <ul class="cell_grid">
-                <li class="cell_feature_row" style="width:40%;">
-                    <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M20 10C20 14.4183 12 22 12 22C12 22 4 14.4183 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10Z" stroke="#000000" stroke-width="2.5"></path><path d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z" fill="#000000" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    <label class="cell_feature_text">address</label>
-                </li>
-                <li style="display:inline-block;width:40%;">
-                    <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12.4409 9.12717L11.0322 14.7618L15.9626 21.1008" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10.3278 18.2835L8.21484 21.1008" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.21484 13.3532C8.21484 9.40889 11.0323 9.12714 12.4409 9.12717L13.8494 9.12714C14.0842 10.301 15.1172 12.7897 17.3711 13.3531" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13 7C14.1046 7 15 6.10457 15 5C15 3.89543 14.1046 3 13 3C11.8954 3 11 3.89543 11 5C11 6.10457 11.8954 7 13 7Z" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    <label class="cell_feature_text">distance</label>
-                </li>
-                <br><br>  
-                <li style="display:inline-block;width:40%;padding-left: 10%;">
-                    <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M3 10V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V10" stroke="#000000" stroke-width="2.5"></path><path d="M14.8333 21V15C14.8333 13.8954 13.9379 13 12.8333 13H10.8333C9.72874 13 8.83331 13.8954 8.83331 15V21" stroke="#000000" stroke-width="2.5" stroke-miterlimit="16"></path><path d="M21.8183 9.36418L20.1243 3.43517C20.0507 3.17759 19.8153 3 19.5474 3H15.5L15.9753 8.70377C15.9909 8.89043 16.0923 9.05904 16.2532 9.15495C16.6425 9.38698 17.4052 9.81699 18 10C19.0158 10.3125 20.5008 10.1998 21.3465 10.0958C21.6982 10.0526 21.9157 9.7049 21.8183 9.36418Z" stroke="#000000" stroke-width="2.5"></path><path d="M14 10C14.5675 9.82538 15.2879 9.42589 15.6909 9.18807C15.8828 9.07486 15.9884 8.86103 15.9699 8.63904L15.5 3H8.5L8.03008 8.63904C8.01158 8.86103 8.11723 9.07486 8.30906 9.18807C8.71207 9.42589 9.4325 9.82538 10 10C11.493 10.4594 12.507 10.4594 14 10Z" stroke="#000000" stroke-width="2.5"></path><path d="M3.87567 3.43517L2.18166 9.36418C2.08431 9.7049 2.3018 10.0526 2.6535 10.0958C3.49916 10.1998 4.98424 10.3125 6 10C6.59477 9.81699 7.35751 9.38698 7.74678 9.15495C7.90767 9.05904 8.00913 8.89043 8.02469 8.70377L8.5 3H4.45258C4.18469 3 3.94926 3.17759 3.87567 3.43517Z" stroke="#000000" stroke-width="2.5"></path></svg>
-                    <label class="cell_feature_text">category</label> 
-                </li>
-                <li style="display:inline-block;width:40%;">
-                    <svg width="15px" height="15px" stroke-width="2.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M9 2L15 2" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 10L12 14" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 22C16.4183 22 20 18.4183 20 14C20 9.58172 16.4183 6 12 6C7.58172 6 4 9.58172 4 14C4 18.4183 7.58172 22 12 22Z" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    <label class="cell_feature_text">hours</label>
-                </li>
-                <br><br> 
-                <li style="display:inline-block;width:100%;">
-                    <label class="cell_feature_header">Rating</label>
-                    <br><br>
-                    <button class="rate_btn">1</button>
-                    <button class="rate_btn">2</button>
-                    <button class="rate_btn">3</button>
-                    <button class="rate_btn">4</button>
-                    <button class="rate_btn">5</button>
-                    <button class="rate_btn">6</button>
-                    <button class="rate_btn">7</button>
-                    <button class="rate_btn">8</button>
-                    <button class="rate_btn">9</button>
-                    <button class="rate_btn">10</button>
-                </li>
-                <br><br>
-                <li style="display:inline-block;width:45%;padding-right:4%;">
-                    <button class="link_btn" style="text-decoration:none;width:100%;">save</button>
-                </li>
-                <li style="display:inline-block;width:45%;">
-                    <a class="link_btn" href="staff.html" style="text-decoration:none;width:100%;">link</a>
-                </li>
-            </ul>
-        </div>
-        <div class="content_item">
-
-        </div>
-        <div class="content_item">
-
-        </div>
-        <div class="content_item">
-
-        </div>
-        <div class="content_item">
-
-        </div>
-        <div class="content_item">
-
-        </div>
-        <div class="content_item">
-
-        </div>
-        <div class="content_item">
-
-        </div>
-        <div class="content_item">
-
-        </div>
+        </div>        
+        {% endfor %}
     </div>
+
+    <script>
+
+        window.onload = function() {
+            hu = window.location.search.substring(1);
+            gy = hu.split("&");
+
+            for (i=0;i<gy.length;i++) {
+                ft = gy[i].split("=");
+                if (ft[0] == "day") {
+                    var dateInput = document.getElementById('day_input');
+                    dateInput.value = ft[1];
+                    console.log(ft[1]);
+                }
+                else if (ft[0] == "area") { // DOES NOT WORK
+                    var selectElement = document.getElementById('area');
+                    selectElement.value = ft[1].replace('+', ' ');
+                }
+                else if (ft[0] == "rad") {
+                    var radInput = document.getElementById('radius');
+                    radInput.value = ft[1];
+                    console.log(ft[1]);
+                }
+                else if (ft[0] == "itin_dur") {
+                    var ihrsInput = document.getElementById('itinerary_hrs');
+                    ihrsInput.value = ft[1];
+                    console.log(ft[1]);
+                }
+                else if (ft[0] == "tf_itin") {
+                    var itinInput = document.getElementById('itinerary_tf');
+                    if (ft[1] == "on") {
+                        itinInput.checked = true;
+                    }
+                    console.log(ft[1]);
+                }
+                else if (ft[0] == "rec_sys") {
+                    var itinInput = document.getElementById('rec');
+                    itinInput.value = ft[1];
+                    console.log(ft[1]);
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var buttons = document.querySelectorAll('.rate_btn');
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+
+                    // styling
+                    let siblings = this.parentNode.querySelectorAll('.rate_btn');
+                    siblings.forEach((sibling) => {
+                        if (sibling !== this) {
+                            sibling.style.border = '0px solid black';
+                        }
+                    });
+                    this.style.border = '1px solid black';
+
+
+                    // function
+
+                    let parent = button.parentNode;
+
+                    let label = parent.querySelector('.invisilbl');
+                    let labelText = label.textContent || label.innerText;
+
+                    const data = {
+                        rating_id: parseInt(this.textContent),
+                        item_id: parseInt(labelText),
+                        user_id: parseInt(1)
+                    };
+
+                    fetch('/submitrating', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var buttons = document.querySelectorAll('.link_btn');
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    if (this.textContent === "save") {
+                        this.style.border = '1px solid black';
+                        this.style.backgroundColor = '#000000';
+                        this.style.color = '#b2733d';
+                        this.textContent = "saved"
+                    }
+                    else if (this.textContent === "saved!") {
+                        this.style.backgroundColor = '#ed9850';
+                        this.style.color = '#000';
+                        this.textContent = "save"
+                    }
+                    // SAVE USER INTERACTION
+                });
+            });
+        });
+
+        
+    </script>
 
 </body>
 </html>
